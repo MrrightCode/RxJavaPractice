@@ -1,7 +1,7 @@
 package com.example.yangbin.rxjavapractice;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -9,10 +9,8 @@ import android.widget.TextView;
 
 import com.example.yangbin.rxjavapractice.Entity.TransformWord;
 import com.example.yangbin.rxjavapractice.Utils.RetrofitUtil;
-import com.jakewharton.rxbinding2.InitialValueObservable;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
-
 
 import java.util.HashMap;
 import java.util.Map;
@@ -42,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         initView();
         mApiService = RetrofitUtil.getApiService();
         editeChangeQuery();
+
 
         RxView.clicks(findViewById(R.id.btn_test))
                 .throttleFirst(1, TimeUnit.SECONDS)
@@ -159,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
-    private void justTransform(Observable<TransformWord> observable) {
+    private void justTransform(Observable<TransformWord> observable)   {
         observable.throttleFirst(2, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .map(new Function<TransformWord, String>() {
