@@ -4,11 +4,15 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.yangbin.rxjavapractice.Entity.TransformWord;
 import com.example.yangbin.rxjavapractice.Utils.RetrofitUtil;
+import com.example.yb.mylibrary.CopyRxJava1.Caller;
+import com.example.yb.mylibrary.CopyRxJava1.Calling;
+import com.example.yb.mylibrary.CopyRxJava1.Receiver;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxTextView;
 
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "time";
     private TextView mText, mTextChange;
     private EditText mEditText;
+    private Button mButton1;
     RetrofitUtil.ApiService mApiService;
     private Observable<TransformWord> observable;
     private EditText mEditTextQuery;
@@ -38,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
+        initEvent();
         mApiService = RetrofitUtil.getApiService();
         editeChangeQuery();
-
 
         RxView.clicks(findViewById(R.id.btn_test))
                 .throttleFirst(1, TimeUnit.SECONDS)
@@ -71,6 +76,44 @@ public class MainActivity extends AppCompatActivity {
                         mText.setText(s);
                     }
                 });
+
+
+
+
+    }
+
+    /**
+    *@Create by  yb on 2018/4/9
+    *@params: 点击事件响应
+    *
+    */
+    private void initEvent() {
+        mButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calling calling = Caller.Create(new Caller.OnCall<String>() {
+                    @Override
+                    public void call(Receiver t) {
+                        t.onReceive("test");
+                    }
+                }).call(new Receiver<String>() {
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+
+                    }
+
+                    @Override
+                    public void onReceive(String s) {
+                        Log.d(TAG, "onReceive: "+s.toString());
+                    }
+                });
+            }
+        });
 
     }
 
@@ -115,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         mTextChange = findViewById(R.id.tv_test1);
         mEditText = findViewById(R.id.etv_test);
         mEditTextQuery = findViewById(R.id.etv_query);
-
+        mButton1 = findViewById(R.id.btn_copy_rxjava1);
     }
 
 
